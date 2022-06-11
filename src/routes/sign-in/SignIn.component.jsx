@@ -1,16 +1,19 @@
 import React from 'react'
 import { signInWithGooglePopup, createUserDocumentFromAuth } from '../../utils/firebase.utils'
-
+import SignUpForm from '../../components/sign-up-form/sign-up-form.component'
 const SignIn = () => {
     const SignIn = async () => {
         const response = await signInWithGooglePopup()
         createUserDocumentFromAuth(response.user)
     }
     return (
-        <>
-            <h2>Sign In</h2>
-            <button onClick={SignIn}>Sign In</button>
-        </>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <SignUpForm />
+            <div >
+                <h2>Sign In</h2>
+                <button onClick={SignIn}>Sign In</button>
+            </div>
+        </div>
     )
 }
 
