@@ -3,12 +3,7 @@ import { getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider } from
 import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAFcrVCgK6JVjN13FwhweNgLZ80-Fxm3ZM",
-    authDomain: "crwn-project-74b85.firebaseapp.com",
-    projectId: "crwn-project-74b85",
-    storageBucket: "crwn-project-74b85.appspot.com",
-    messagingSenderId: "193836889793",
-    appId: "1:193836889793:web:4762d5a3e728d128d90640"
+
 }
 
 // Initialize Firebase
