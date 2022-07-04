@@ -7,12 +7,12 @@ const SignIn = () => {
         createUserDocumentFromAuth(response.user)
     }
     return (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <SignUpForm />
+        <div>
             <div >
                 <h2>Sign In</h2>
                 <button onClick={SignIn}>Sign In</button>
             </div>
+            <SignUpForm />
         </div>
     )
 }
