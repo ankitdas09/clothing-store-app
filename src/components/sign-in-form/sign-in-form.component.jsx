@@ -1,19 +1,17 @@
 import { useState, useContext } from 'react'
-import { createAuthWithEmailAndPassword, createUserDocumentFromAuth } from '../../utils/firebase.utils'
+import { signInWithGooglePopup, createUserDocumentFromAuth, signInAuthWithEmailAndPassword } from '../../utils/firebase.utils'
 import FormInput from '../form-input/form-input.conponent'
-import './sign-up-form.styles.scss'
+import './sign-in-form.styles.scss'
 import Button from '../button/button.component'
 import { UserContext } from '../../contexts/user.context'
 const defaultCredentials = {
-    displayName: '',
     email: '',
     password: '',
-    confirmPassword: ''
 }
 
-const SignUpForm = () => {
+const SignInForm = () => {
     const [formFields, setFormFields] = useState(defaultCredentials)
-    const { displayName, email, password, confirmPassword } = formFields
+    const { email, password } = formFields
 
     const { setCurrentUser } = useContext(UserContext)
 
@@ -27,33 +25,33 @@ const SignUpForm = () => {
     }
     const handleSubmit = async (e) => {
         e.preventDefault()
-        if (password !== confirmPassword || password == '') {
-            alert('Passwords do not match!')
-            return
+        try {
+            const { user } = await signInAuthWithEmailAndPassword(email, password)
+            setCurrentUser(user)
+            resetFormFields()
+        } catch (error) {
+            console.log(error.message)
         }
-        const { user } = await createAuthWithEmailAndPassword(email, password)
-        if (!user) {
-            console.log('Error')
-            return
-        }
-        setCurrentUser(user)
-        await createUserDocumentFromAuth(user, { displayName })
-        resetFormFields()
     }
 
+    const signInWithGoogle = async () => {
+        const response = await signInWithGooglePopup()
+        await createUserDocumentFromAuth(response.user)
+    }
     return (
         <div className='sign-up-container'>
-            <h2>Don't have an account?</h2>
+            <h2>Already have an account?</h2>
             <span>Sign up with email and password</span>
             <form onSubmit={handleSubmit}>
-                <FormInput label='Display Name' required type="text" id='username' name='displayName' value={displayName} onChange={handleChange} />
                 <FormInput label='Email' required type="email" id='email' name='email' value={email} onChange={handleChange} />
                 <FormInput label='Password' required type="password" id='password' name='password' value={password} onChange={handleChange} />
-                <FormInput label='Confirm Password' required type="password" id='c-password' name='confirmPassword' value={confirmPassword} onChange={handleChange} />
-                <Button type='submit'>Sign Up</Button>
+                <div className="button-container">
+                    <Button type='submit'>Sign In</Button>
+                    <Button type='button' buttonType='google' onClick={signInWithGoogle}>Google Sign In</Button>
+                </div>
             </form>
         </div>
     )
 }
 
-export default SignUpForm
+export default SignInForm
